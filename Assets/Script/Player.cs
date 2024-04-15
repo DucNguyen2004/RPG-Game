@@ -17,8 +17,8 @@ public class Player : MonoBehaviour
 
     [Header("Ground detection")]
     [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask whatIsGround;
-    private bool isGround;
+    [SerializeField] private LayerMask whatIsGrounded;
+    private bool isGrounded;
 
     void Start()
     {
@@ -34,12 +34,11 @@ public class Player : MonoBehaviour
         GroundCheck();
 
         HandleFlip();
-
         AnimatorController();
     }
     private void GroundCheck()
     {
-        isGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGrounded);
 
     }
     private void CheckInput()
@@ -58,13 +57,16 @@ public class Player : MonoBehaviour
     }
     private void Jump()
     {
-        if (isGround)
+        if (isGrounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
     private void AnimatorController()
     {
         bool isMoving = rb.velocity.x != 0;
+        anim.SetFloat("yVelocity", rb.velocity.y);
+
         anim.SetBool("isMoving", isMoving);
+        anim.SetBool("isGrounded", isGrounded);
     }
     // can optimize the flip functions
     private void Flip()

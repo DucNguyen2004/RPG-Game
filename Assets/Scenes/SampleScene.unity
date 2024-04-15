@@ -262,10 +262,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed5dbf20320e234f995c7f99567d0a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  jumpForce: 7
+  moveSpeed: 8
+  jumpForce: 12
   groundCheckDistance: 1.3
-  whatIsGround:
+  whatIsGrounded:
     serializedVersion: 2
     m_Bits: 8
 --- !u!70 &582317565
@@ -318,7 +318,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
