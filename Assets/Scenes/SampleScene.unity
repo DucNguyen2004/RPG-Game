@@ -264,6 +264,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4
   jumpForce: 7
+  groundCheckDistance: 1.3
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!70 &582317565
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -322,9 +326,9 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!1 &607630621
 GameObject:
@@ -443,7 +447,7 @@ GameObject:
   - component: {fileID: 1448607870}
   - component: {fileID: 1448607869}
   - component: {fileID: 1448607871}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +577,7 @@ GameObject:
   - component: {fileID: 1685090070}
   - component: {fileID: 1685090069}
   - component: {fileID: 1685090071}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
