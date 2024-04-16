@@ -4,11 +4,9 @@ using System.Reflection.Emit;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
-
-    private Rigidbody2D rb;
-    private Animator anim;
+    [Header("Movement info")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
 
@@ -26,32 +24,21 @@ public class Player : MonoBehaviour
     private int attackCounter;
 
     private float xInput;
-    private int facingDir = 1;
-    private bool isFacingRight = true;
 
-    [Header("Ground detection")]
-    [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask whatIsGrounded;
-    private bool isGrounded;
-
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
+        base.Start();
     }
 
-
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         Movement();
         CheckInput();
-        GroundCheck();
 
         dashTime -= Time.deltaTime;
         dashCooldownTimer -= Time.deltaTime;
         comboTimer -= Time.deltaTime;
-
-
 
         HandleFlip();
         AnimatorController();
@@ -87,10 +74,7 @@ public class Player : MonoBehaviour
             dashCooldownTimer = dashCooldown;
         }
     }
-    private void GroundCheck()
-    {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGrounded);
-    }
+
     private void CheckInput()
     {
         xInput = Input.GetAxisRaw("Horizontal");
@@ -140,13 +124,7 @@ public class Player : MonoBehaviour
         anim.SetBool("isAttacking", isAttacking);
         anim.SetInteger("attackCounter", attackCounter);
     }
-    // can optimize the flip functions
-    private void Flip()
-    {
-        facingDir *= -1;
-        isFacingRight = !isFacingRight;
-        transform.Rotate(0, 180, 0);
-    }
+
     private void HandleFlip()
     {
         if (rb.velocity.x > 0 && !isFacingRight)
@@ -155,8 +133,9 @@ public class Player : MonoBehaviour
             Flip();
     }
 
-    private void OnDrawGizmos()
+    protected override void CollisionCheck()
     {
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y - groundCheckDistance));
+        base.CollisionCheck();
     }
+
 }
