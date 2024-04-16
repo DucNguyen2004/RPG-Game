@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     private float dashCooldownTimer;
 
     [Header("Attack info")]
+    [SerializeField] private float comboTime;
+    private float comboTimer;
     private bool isAttacking;
     private int attackCounter;
 
@@ -47,18 +49,39 @@ public class Player : MonoBehaviour
 
         dashTime -= Time.deltaTime;
         dashCooldownTimer -= Time.deltaTime;
+        comboTimer -= Time.deltaTime;
+
 
 
         HandleFlip();
         AnimatorController();
     }
+    private void StartAttack()
+    {
+        if (!isGrounded)
+        {
+            return;
+        }
+        if (comboTimer < 0)
+            attackCounter = 0;
+
+        isAttacking = true;
+        comboTimer = comboTime;
+    }
     public void AttackOver()
     {
         isAttacking = false;
+
+        attackCounter++;
+
+        if (attackCounter > 2)
+        {
+            attackCounter = 0;
+        }
     }
     private void DashAbility()
     {
-        if (dashCooldownTimer < 0)
+        if (dashCooldownTimer < 0 && !isAttacking)
         {
             dashTime = dashDuration;
             dashCooldownTimer = dashCooldown;
@@ -74,7 +97,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            isAttacking = true;
+            StartAttack();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -88,7 +111,11 @@ public class Player : MonoBehaviour
     }
     private void Movement()
     {
-        if (dashTime > 0)
+        if (isAttacking)
+        {
+            rb.velocity = Vector2.zero;
+        }
+        else if (dashTime > 0)
         {   // dash 
             rb.velocity = new Vector2(facingDir * dashSpeed, 0);
         }
