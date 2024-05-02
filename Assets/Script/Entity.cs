@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    protected Rigidbody2D rb;
-    protected Animator anim;
-    protected int facingDir = 1;
-    protected bool isFacingRight = true;
+    #region Components
+    public Animator anim { get; private set; }
+    public Rigidbody2D rb { get; private set; }
+    #endregion
 
     [Header("Collision detection")]
     [SerializeField] protected Transform groundCheck;
@@ -17,34 +17,61 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float wallCheckDistance;
     [SerializeField] protected LayerMask whatIsGrounded;
 
+    public int facingDir { get; private set; }
+    protected bool isFacingRight = true;
+
     protected bool isGrounded;
     protected bool isWallDetection;
 
+    protected virtual void Awake()
+    {
+
+    }
     protected virtual void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        facingDir = 1;
     }
 
     protected virtual void Update()
     {
-        CollisionCheck();
+
     }
-    protected virtual void CollisionCheck()
+
+    #region Velocity
+    public void SetZeroVelocity() => rb.velocity = Vector2.zero;
+    public void SetVelociy(float _xVelocity, float _yVelocity)
     {
-        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGrounded);
-        isWallDetection = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * facingDir, whatIsGrounded);
+        rb.velocity = new Vector2(_xVelocity, _yVelocity);
+        HandleFlip(_xVelocity);
     }
-    // can optimize the flip functions
-    protected virtual void Flip()
+    #endregion
+
+    #region Collision Check
+    public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGrounded);
+    public virtual bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * facingDir, whatIsGrounded);
+    protected virtual void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
+    }
+    #endregion
+
+    #region Flip
+    public virtual void Flip()
     {
         facingDir *= -1;
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180, 0);
     }
-    protected virtual void OnDrawGizmos()
+
+    public virtual void HandleFlip(float _x)
     {
-        Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
-        Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
+        if (_x > 0 && !isFacingRight)
+            Flip();
+        else if (_x < 0 && isFacingRight)
+            Flip();
     }
+    #endregion
 }
