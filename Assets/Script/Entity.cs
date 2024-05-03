@@ -10,6 +10,11 @@ public class Entity : MonoBehaviour
     public EntityFX fx { get; private set; }
     #endregion
 
+    [Header("Knockback info")]
+    [SerializeField] protected Vector2 knockbackDirection;
+    [SerializeField] protected float knockbackDuration;
+    protected bool isKnocked;
+
     [Header("Collision detection")]
     public Transform attackCheck;
     public float attackRadius;
@@ -45,13 +50,32 @@ public class Entity : MonoBehaviour
     public void Damage()
     {
         fx.StartCoroutine("FlashFX");
+        StartCoroutine("HitKnockBack");
         Debug.Log(gameObject.name + "  was damaged");
     }
 
+    protected virtual IEnumerator HitKnockBack()
+    {
+        isKnocked = true;
+
+        rb.velocity = new Vector2(knockbackDirection.x * -facingDir, knockbackDirection.y);
+
+        yield return new WaitForSeconds(knockbackDuration);
+
+        isKnocked = false;
+    }
+
     #region Velocity
-    public void SetZeroVelocity() => rb.velocity = Vector2.zero;
+    public void SetZeroVelocity()
+    {
+        if (isKnocked) return;
+
+        rb.velocity = Vector2.zero;
+    }
     public void SetVelociy(float _xVelocity, float _yVelocity)
     {
+        if (isKnocked) return;
+
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
         HandleFlip(_xVelocity);
     }
