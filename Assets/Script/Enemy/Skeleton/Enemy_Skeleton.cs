@@ -32,4 +32,14 @@ public class Enemy_Skeleton : Enemy
     {
         base.Update();
     }
+
+    public override bool CanBeStunned()
+    {
+        if (base.CanBeStunned())
+        {
+            stateMachine.ChangeState(StunnedState);
+            return true;
+        }
+        return false;
+    }
 }
