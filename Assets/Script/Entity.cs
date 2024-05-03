@@ -7,9 +7,12 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator anim { get; private set; }
     public Rigidbody2D rb { get; private set; }
+    public EntityFX fx { get; private set; }
     #endregion
 
     [Header("Collision detection")]
+    public Transform attackCheck;
+    public float attackRadius;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
     [Space]
@@ -29,6 +32,7 @@ public class Entity : MonoBehaviour
     }
     protected virtual void Start()
     {
+        fx = GetComponent<EntityFX>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         facingDir = 1;
@@ -37,6 +41,11 @@ public class Entity : MonoBehaviour
     protected virtual void Update()
     {
 
+    }
+    public void Damage()
+    {
+        fx.StartCoroutine("FlashFX");
+        Debug.Log(gameObject.name + "  was damaged");
     }
 
     #region Velocity
@@ -55,6 +64,7 @@ public class Entity : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
+        Gizmos.DrawWireSphere(attackCheck.position, attackRadius);
     }
     #endregion
 
