@@ -11,6 +11,7 @@ public class Enemy_Skeleton : Enemy
     public SkeletonMoveState MoveState { get; private set; }
     public SkeletonBattleState BattleState { get; private set; }
     public SkeletonAttackState AttackState { get; private set; }
+    public SkeletonStunnedState StunnedState { get; private set; }
     #endregion
     protected override void Awake()
     {
@@ -19,6 +20,7 @@ public class Enemy_Skeleton : Enemy
         MoveState = new SkeletonMoveState(this, stateMachine, "Move", this);
         BattleState = new SkeletonBattleState(this, stateMachine, "Move", this);
         AttackState = new SkeletonAttackState(this, stateMachine, "Attack", this);
+        StunnedState = new SkeletonStunnedState(this, stateMachine, "Stunned", this);
     }
 
     protected override void Start()

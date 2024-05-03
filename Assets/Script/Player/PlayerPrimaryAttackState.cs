@@ -14,6 +14,9 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
+
+        xInput = 0; // need to fix the attack 
+
         if (comboCounter > 2 || Time.time > lastTimeAttacked + comboWindow)
             comboCounter = 0;
 

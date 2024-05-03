@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1591810478541079294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3508775468152888841}
+  m_Layer: 7
+  m_Name: AttackCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3508775468152888841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591810478541079294}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.07, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4688336773164742996}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1664721042622609981
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4882776949500110365}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +74,8 @@ GameObject:
   - component: {fileID: 1034148365998887255}
   - component: {fileID: 8336846666522968804}
   - component: {fileID: 4019451746799036695}
-  m_Layer: 6
+  - component: {fileID: 8012637022948598124}
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,6 +98,7 @@ Transform:
   - {fileID: 6122814271225929658}
   - {fileID: 8821498922802443856}
   - {fileID: 4882776949500110365}
+  - {fileID: 3508775468152888841}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1034148365998887255
@@ -142,11 +175,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed5dbf20320e234f995c7f99567d0a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
-  jumpForce: 12
-  dashCooldown: 2
-  dashSpeed: 25
-  dashDuration: 0.2
+  knockbackDirection: {x: 0, y: 0}
+  knockbackDuration: 0
+  attackCheck: {fileID: 3508775468152888841}
+  attackRadius: 0.8
   groundCheck: {fileID: 8821498922802443856}
   groundCheckDistance: 0.15
   wallCheck: {fileID: 4882776949500110365}
@@ -154,7 +186,29 @@ MonoBehaviour:
   whatIsGrounded:
     serializedVersion: 2
     m_Bits: 8
-  isFacingRight: 1
+  attackMovement:
+  - {x: 3, y: 1.5}
+  - {x: 1, y: 2.5}
+  - {x: 4, y: 1.5}
+  moveSpeed: 15
+  jumpForce: 12
+  dashCooldown: 2
+  dashSpeed: 25
+  dashDuration: 0.2
+--- !u!114 &8012637022948598124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086214755554258559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cbccd2633a9ad43b1c7d41146b723d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitMat: {fileID: 2100000, guid: ffc0e36138260334997a833c6d6fe04e, type: 2}
+  flashDuration: 0.15
 --- !u!1 &3998047090155952588
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +221,7 @@ GameObject:
   - component: {fileID: 6258846925575085808}
   - component: {fileID: 2757182217799422243}
   - component: {fileID: 2029676707157305155}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,8 +281,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2132316061
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -283,7 +337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8821498922802443856}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
