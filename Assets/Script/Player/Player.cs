@@ -36,6 +36,9 @@ public class Player : Entity
     public PlayerCounterAttackState counterAttackState { get; private set; }
     #endregion
 
+    #region Skill
+    public SkillManager Skill { get; private set; }
+    #endregion
     protected override void Awake()
     {
         base.Awake();
@@ -49,6 +52,8 @@ public class Player : Entity
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
+
+        Skill = SkillManager.instance;
     }
 
     protected override void Start()
